@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Clicker with Dynamic Interval",
+  "version": "1.0",
+  "description": "Clicks a specific element at a dynamic interval based on user input.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.iqrpg.com/game.html"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

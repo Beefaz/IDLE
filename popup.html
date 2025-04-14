@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auto Clicker Settings</title>
+    <style>
+        body {
+            width: 200px;
+            padding: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #status {
+            margin-top: 10px;
+            font-size: small;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <label for="multiplier">Enter Multiplier:</label>
+    <input type="number" id="multiplier" min="1" value="">
+</div>
+<button id="startButton">Start Auto Clicker</button>
+<div id="status"></div>
+<script src="popup.js"></script>
+</body>
+</html>
