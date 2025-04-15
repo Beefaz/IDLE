@@ -60,19 +60,21 @@ function startBossClicking() {
     clearInterval(bossClickingInterval);
   }
 
-  function clickBoss() {
+  function checkAndClickBoss() {
     const bossElements = document.getElementsByClassName("clickable boss");
     if (bossElements.length > 0) {
       bossElements[0].click();
-      // Reinitialize after 2 minutes (120,000 milliseconds)
+      console.log("Clicked 'clickable boss'. Waiting for 2 minutes before checking again.");
+      clearInterval(bossClickingInterval); // Stop the 1-second checking
+
+      // Reinitialize the checking after 2 minutes (120,000 milliseconds)
       setTimeout(startBossClicking, 120000);
     } else {
-      console.log("No element with class 'clickable boss' found.");
-      // Reinitialize after 2 minutes even if not found, to keep trying
-      setTimeout(startBossClicking, 120000);
+      // Keep checking every second if the boss element is not found
+      console.log("Checking for 'clickable boss'...");
     }
   }
 
-  // Click every second
-  bossClickingInterval = setInterval(clickBoss, 1000);
+  // Start checking for the boss every second
+  bossClickingInterval = setInterval(checkAndClickBoss, 1000);
 }
