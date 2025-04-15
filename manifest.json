@@ -5,7 +5,8 @@
   "description": "Clicks a specific element at a dynamic interval based on user input.",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "alarms"
   ],
   "action": {
     "default_popup": "popup.html"

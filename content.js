@@ -1,12 +1,15 @@
 let clickingInterval;
 let multiplierValue;
 let hasClickedOnce = false;
+let bossClickingInterval;
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.action === 'setMultiplier') {
       multiplierValue = request.multiplier;
       performFirstClick();
+    } else if (request.action === 'startBossClicking') {
+      startBossClicking();
     }
   }
 );
@@ -50,4 +53,26 @@ function startRandomizedClicking() {
 
   // Start the randomized clicking loop
   clickAndSchedule();
+}
+
+function startBossClicking() {
+  if (bossClickingInterval) {
+    clearInterval(bossClickingInterval);
+  }
+
+  function clickBoss() {
+    const bossElements = document.getElementsByClassName("clickable boss");
+    if (bossElements.length > 0) {
+      bossElements[0].click();
+      // Reinitialize after 2 minutes (120,000 milliseconds)
+      setTimeout(startBossClicking, 120000);
+    } else {
+      console.log("No element with class 'clickable boss' found.");
+      // Reinitialize after 2 minutes even if not found, to keep trying
+      setTimeout(startBossClicking, 120000);
+    }
+  }
+
+  // Click every second
+  bossClickingInterval = setInterval(clickBoss, 1000);
 }

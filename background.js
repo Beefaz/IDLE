@@ -20,5 +20,22 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     } catch (error) {
       console.error('Error executing script or sending message:', error);
     }
+  } else if (request.action === 'startBossClicker') {
+    try {
+      const activeTabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (activeTabs && activeTabs.length > 0) {
+        const activeTabId = activeTabs[0].id;
+        await chrome.scripting.executeScript({
+          target: { tabId: activeTabId },
+          files: ['content.js']
+        }, () => {
+          chrome.tabs.sendMessage(activeTabId, { action: 'startBossClicking' });
+        });
+      } else {
+        console.error('No active tab found to start boss clicker.');
+      }
+    } catch (error) {
+      console.error('Error starting boss clicker:', error);
+    }
   }
 });
