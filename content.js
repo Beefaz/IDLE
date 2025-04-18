@@ -5,7 +5,7 @@ let bossClickingInterval;
 let eventClickingInterval;
 
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+  function (request) {
     if (request.action === 'setMultiplier') {
       multiplierValue = request.multiplier;
       performFirstClick();
@@ -38,6 +38,7 @@ function startRandomizedClicking() {
     const randomDelay = Math.random() * (maxDelayMilliseconds - minDelayMilliseconds) + minDelayMilliseconds;
     clickingInterval = setTimeout(clickAndSchedule, randomDelay);
   }
+
   clickAndSchedule();
 }
 
@@ -52,6 +53,7 @@ function startBossClicking() {
       setTimeout(startBossClicking, 120000);
     }
   }
+
   bossClickingInterval = setInterval(checkAndClickBoss, 1000);
 }
 
@@ -60,17 +62,16 @@ function startEventClicking() {
 
   function clickEventLink() {
     const container = document.getElementsByClassName("game-grid");
-    if (container.length > 2) {
-      const eventTextElements = container[2].getElementsByClassName("event-text");
-      if (eventTextElements.length > 0 && eventTextElements[0].parentNode) {
-        const linkElement = eventTextElements[0].parentNode.getElementsByTagName("a")[0];
-        if (linkElement) {
-          linkElement.click();
-          clearInterval(eventClickingInterval);
-          setTimeout(startEventClicking, 600000);
-        }
+    const eventTextElements = container[container.length - 1].getElementsByClassName("event-text") ?? undefined;
+    if (eventTextElements.length > 0 && eventTextElements[0].parentNode) {
+      const linkElement = eventTextElements[0].parentNode.getElementsByTagName("a")[0];
+      if (linkElement) {
+        linkElement.click();
+        clearInterval(eventClickingInterval);
+        setTimeout(startEventClicking, 600000);
       }
     }
   }
+
   clickEventLink();
 }

@@ -1,42 +1,29 @@
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+//background.js
+chrome.runtime.onMessage.addListener(async (request) => {
   if (request.action === 'startClicking') {
     const multiplier = request.multiplier;
     try {
-      const activeTabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      const activeTabs = await chrome.tabs.query({active: true, currentWindow: true});
       if (activeTabs && activeTabs.length > 0) {
-        const activeTabId = activeTabs[0].id;
-        await chrome.scripting.executeScript({
-          target: { tabId: activeTabId },
-          files: ['content.js']
-        });
-        chrome.tabs.sendMessage(activeTabId, { action: 'setMultiplier', multiplier: multiplier });
+        chrome.tabs.sendMessage(activeTabs[0].id, {action: 'setMultiplier', multiplier: multiplier});
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   } else if (request.action === 'startBossClicker') {
     try {
-      const activeTabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      const activeTabs = await chrome.tabs.query({active: true, currentWindow: true});
       if (activeTabs && activeTabs.length > 0) {
-        const activeTabId = activeTabs[0].id;
-        await chrome.scripting.executeScript({
-          target: { tabId: activeTabId },
-          files: ['content.js']
-        }, () => {
-          chrome.tabs.sendMessage(activeTabId, { action: 'startBossClicking' });
-        });
+        chrome.tabs.sendMessage(activeTabs[0].id, {action: 'startBossClicker'});
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   } else if (request.action === 'startEventClicker') {
     try {
-      const activeTabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      const activeTabs = await chrome.tabs.query({active: true, currentWindow: true});
       if (activeTabs && activeTabs.length > 0) {
-        const activeTabId = activeTabs[0].id;
-        await chrome.scripting.executeScript({
-          target: { tabId: activeTabId },
-          files: ['content.js']
-        }, () => {
-          chrome.tabs.sendMessage(activeTabId, { action: 'startEventClicker' });
-        });
+        chrome.tabs.sendMessage(activeTabs[0].id, {action: 'startEventClicker'});
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   }
 });

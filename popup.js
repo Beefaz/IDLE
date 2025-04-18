@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     statusDiv.textContent = `Action Timer Clicker started with multiplier: ${multiplier}`;
     try {
-      const activeTabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      const activeTabs = await chrome.tabs.query({active: true, currentWindow: true});
       if (activeTabs && activeTabs.length > 0) {
-        chrome.runtime.sendMessage({ action: 'startClicking', multiplier: multiplier });
+        chrome.runtime.sendMessage({action: 'startClicking', multiplier: multiplier});
       } else {
         statusDiv.textContent = 'Error: No active tab found.';
       }
@@ -27,9 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
   startBossButton.addEventListener('click', async () => {
     statusDiv.textContent = 'Boss Clicker started.';
     try {
-      const activeTabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      const activeTabs = await chrome.tabs.query({active: true, currentWindow: true});
       if (activeTabs && activeTabs.length > 0) {
-        chrome.runtime.sendMessage({ action: 'startBossClicker' });
+        chrome.runtime.sendMessage({action: 'startBossClicker'});
       } else {
         statusDiv.textContent = 'Error: No active tab found to start boss clicker.';
       }
@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
   startEventButton.addEventListener('click', async () => {
     statusDiv.textContent = 'Event Clicker activated.';
     try {
-      const activeTabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      const activeTabs = await chrome.tabs.query({active: true, currentWindow: true});
       if (activeTabs && activeTabs.length > 0) {
-        chrome.runtime.sendMessage({ action: 'startEventClicker' });
+        chrome.runtime.sendMessage({action: 'startEventClicker'});
       } else {
         statusDiv.textContent = 'Error: No active tab found to start event clicker.';
       }
