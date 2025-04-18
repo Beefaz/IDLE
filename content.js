@@ -6,14 +6,20 @@ let eventClickingInterval;
 
 chrome.runtime.onMessage.addListener(
   function (request) {
-    if (request.action === 'setMultiplier') {
-      multiplierValue = request.multiplier;
-      performFirstClick();
-    } else if (request.action === 'startBossClicking') {
-      startBossClicking();
-    } else if (request.action === 'startEventClicker') {
-      startEventClicking();
-    }
+    const actionHandlers = {
+      setMultiplier: function () {
+        multiplierValue = request.multiplier;
+        performFirstClick();
+      },
+      startBossClicking: function () {
+        startBossClicking();
+      },
+      startEventClicker: function () {
+        startEventClicking();
+      },
+    };
+
+    actionHandlers[request]();
   }
 );
 
@@ -43,17 +49,18 @@ function startRandomizedClicking() {
 }
 
 function startBossClicking() {
-  if (bossClickingInterval) clearTimeout(bossClickingInterval);
+  if (bossClickingInterval) clearInterval(bossClickingInterval);
 
   function checkAndClickBoss() {
     const bossElements = document.getElementsByClassName("clickable boss");
     if (bossElements.length > 0) {
       bossElements[0].click();
-      clearTimeout(bossClickingInterval);
+      clearInterval(bossClickingInterval);
       setTimeout(startBossClicking, 120000);
     }
   }
-  bossClickingInterval = setTimeout(checkAndClickBoss, 1000);
+
+  bossClickingInterval = setInterval(checkAndClickBoss, 1000);
 }
 
 function startEventClicking() {
@@ -66,11 +73,11 @@ function startEventClicking() {
       const linkElement = eventTextElements[0].parentNode.getElementsByTagName("a")[0];
       if (linkElement) {
         linkElement.click();
-        clearTimeout(eventClickingInterval);
+        clearInterval(eventClickingInterval);
         setTimeout(startEventClicking, 600000);
       }
     }
   }
 
-  eventClickingInterval = setTimeout(clickEventLink, 1000);
+  eventClickingInterval = setInterval(clickEventLink, 1000);
 }
