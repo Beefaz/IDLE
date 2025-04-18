@@ -43,18 +43,17 @@ function startRandomizedClicking() {
 }
 
 function startBossClicking() {
-  if (bossClickingInterval) clearInterval(bossClickingInterval);
+  if (bossClickingInterval) clearTimeout(bossClickingInterval);
 
   function checkAndClickBoss() {
     const bossElements = document.getElementsByClassName("clickable boss");
     if (bossElements.length > 0) {
       bossElements[0].click();
-      clearInterval(bossClickingInterval);
+      clearTimeout(bossClickingInterval);
       setTimeout(startBossClicking, 120000);
     }
   }
-
-  bossClickingInterval = setInterval(checkAndClickBoss, 1000);
+  bossClickingInterval = setTimeout(checkAndClickBoss, 1000);
 }
 
 function startEventClicking() {
@@ -67,11 +66,11 @@ function startEventClicking() {
       const linkElement = eventTextElements[0].parentNode.getElementsByTagName("a")[0];
       if (linkElement) {
         linkElement.click();
-        clearInterval(eventClickingInterval);
+        clearTimeout(eventClickingInterval);
         setTimeout(startEventClicking, 600000);
       }
     }
   }
 
-  clickEventLink();
+  eventClickingInterval = setTimeout(clickEventLink, 1000);
 }
