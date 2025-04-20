@@ -1,25 +1,19 @@
 let clickingInterval;
 let multiplierValue;
 let hasClickedOnce = false;
-let bossClickingInterval;
-let eventClickingInterval;
+let bossInterval;
+let eventInterval;
 
 chrome.runtime.onMessage.addListener(
   function (request) {
-    const actionHandlers = {
-      setMultiplier: function () {
-        multiplierValue = request.multiplier;
-        performFirstClick();
-      },
-      startBossClicking: function () {
-        startBossClicking();
-      },
-      startEventClicker: function () {
-        startEventClicking();
-      },
-    };
-
-    actionHandlers[request]();
+    if (request.action === 'setMultiplier') {
+      multiplierValue = request.multiplier;
+      performFirstClick();
+    } else if (request.action === 'startBossClicker') {
+      startBossClicking();
+    } else if (request.action === 'startEventClicker') {
+      startEventClicking();
+    }
   }
 );
 
@@ -49,35 +43,34 @@ function startRandomizedClicking() {
 }
 
 function startBossClicking() {
-  if (bossClickingInterval) clearInterval(bossClickingInterval);
+  if (bossInterval) clearInterval(bossInterval);
 
-  function checkAndClickBoss() {
-    const bossElements = document.getElementsByClassName("clickable boss");
-    if (bossElements.length > 0) {
-      bossElements[0].click();
-      clearInterval(bossClickingInterval);
+  const checkInterval = Math.floor(Math.random() * 201) + 900; // Random interval between 900 and 1000 ms
+
+  bossInterval = setInterval(() => {
+    const bossElement = document.getElementsByClassName("clickable boss")[0] ?? undefined;
+    if (bossElement) {
+      bossElement.click();
+      clearInterval(bossInterval);
       setTimeout(startBossClicking, 120000);
     }
-  }
-
-  bossClickingInterval = setInterval(checkAndClickBoss, 1000);
+  }, checkInterval); // Check every second
 }
 
 function startEventClicking() {
-  if (eventClickingInterval) clearTimeout(eventClickingInterval);
+  if (eventInterval) clearInterval(eventInterval);
 
-  function clickEventLink() {
+  const checkInterval = Math.floor(Math.random() * 201) + 900;
+
+  eventInterval = setInterval(()=>{
     const container = document.getElementsByClassName("game-grid");
-    const eventTextElements = container[container.length - 1].getElementsByClassName("event-text") ?? undefined;
-    if (eventTextElements.length > 0 && eventTextElements[0].parentNode) {
-      const linkElement = eventTextElements[0].parentNode.getElementsByTagName("a")[0];
-      if (linkElement) {
-        linkElement.click();
-        clearInterval(eventClickingInterval);
-        setTimeout(startEventClicking, 600000);
-      }
+    const eventElement = container[container.length - 1].getElementsByClassName("event-text")[0] ?? undefined;
+    if (eventElement) {
+      const neighbourElement = eventElement.parentNode;
+      const targetLinkElement = neighbourElement.getElementsByTagName("a")[0]
+      targetLinkElement.click();
+      clearInterval(eventInterval);
+      setTimeout(startEventClicking, 670000);
     }
-  }
-
-  eventClickingInterval = setInterval(clickEventLink, 1000);
+  }, checkInterval);
 }
