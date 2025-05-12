@@ -10,7 +10,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
     } catch (error) {
     }
   } else if (request.action === 'startBossClicker') {
-    console.log('Starting Boss Clicker in background!'); // Add this line
     try {
       const activeTabs = await chrome.tabs.query({active: true, currentWindow: true});
       if (activeTabs && activeTabs.length > 0) {

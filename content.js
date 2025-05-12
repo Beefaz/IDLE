@@ -1,8 +1,10 @@
 let clickingInterval;
 let multiplierValue;
 let hasClickedOnce = false;
-let bossInterval;
 let eventInterval;
+
+let bossInterval = null;
+let currentBosses = [];
 
 chrome.runtime.onMessage.addListener(
   function (request) {
@@ -42,20 +44,29 @@ function startRandomizedClicking() {
   clickAndSchedule();
 }
 
-function startBossClicking() {
-  if (bossInterval) clearInterval(bossInterval);
+function handleBosses() {
+  const latestBossElements = Array.from(document.getElementsByClassName("clickable boss"));
+  const currentBossCount = latestBossElements.length;
 
-  const checkInterval = Math.floor(Math.random() * 201) + 900; // Random interval between 900 and 1000 ms
-
-  bossInterval = setInterval(() => {
-    const bossElement = document.getElementsByClassName("clickable boss")[0] ?? undefined;
-    if (bossElement) {
-      bossElement.click();
-      clearInterval(bossInterval);
-      setTimeout(startBossClicking, 120000);
+  if (currentBossCount > 0) {
+    if (currentBossCount !== currentBosses.length) {
+      currentBosses = latestBossElements;
+      const firstBoss = currentBosses[0];
+      firstBoss.click();
     }
-  }, checkInterval); // Check every second
+    setTimeout(handleBosses, 100);
+  } else {
+    const checkInterval = Math.floor(Math.random() * 201) + 900;
+    bossInterval = setTimeout(startBossClicking, checkInterval);
+    currentBosses = [];
+  }
 }
+
+function startBossClicking() {
+  if (bossInterval) clearTimeout(bossInterval);
+  handleBosses();
+}
+
 
 function startEventClicking() {
   if (eventInterval) clearInterval(eventInterval);

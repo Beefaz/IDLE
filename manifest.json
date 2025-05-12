@@ -14,7 +14,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.iqrpg.com/game.html"
+        "https://*.iqrpg.com/*"
       ],
       "js": [
         "content.js"
